@@ -7,6 +7,7 @@ const morgan = require('morgan');
 const { PORT, CLIENT_ORIGIN } = require('./config');
 const { dbConnect } = require('./db-mongoose');
 // const {dbConnect} = require('./db-knex');
+const bodyParser = require('body-parser');
 
 const app = express();
 
@@ -31,8 +32,16 @@ app.use(
   })
 );
 
+app.use(bodyParser.json());
+
 app.get('/api/recipes', (req, res)=>{
   res.json(recipes);
+});
+
+app.post('/api/recipes', (req, res)=>{
+  const {title, ingredients, recipe}=req.body;
+  console.log(title, ingredients, recipe);
+  res.json('hello world');
 });
 
 function runServer(port = PORT) {
