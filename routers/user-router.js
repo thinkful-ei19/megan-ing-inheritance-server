@@ -7,7 +7,7 @@ const jsonParser = bodyParser.json();
 
 //Note to self: ideas on how to do this from jwt challenge, 
 //retyped for understanding and modified based on app and notated for comrehension purposes
-router.post('/', jsonParser, (req, res) => {
+router.post('/users', jsonParser, (req, res) => {
   const requiredFields = ['username', 'password'];
   const missingField = requiredFields.find(field => !(field in req.body));
 
@@ -125,4 +125,4 @@ router.post('/', jsonParser, (req, res) => {
 });
 
 
-module.exports = {router};
+module.exports = router;

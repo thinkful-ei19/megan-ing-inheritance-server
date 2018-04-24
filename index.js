@@ -5,6 +5,8 @@ const cors = require('cors');
 const morgan = require('morgan');
 const passport = require('passport');
 const recipeRouter = require('./routers/recipe-router');
+const userRouter = require('./routers/user-router');
+
 
 
 const { PORT, CLIENT_ORIGIN } = require('./config');
@@ -30,6 +32,8 @@ app.use(
 app.use(bodyParser.json());
 
 app.use('/api', recipeRouter);
+app.use('/api', userRouter);
+
 
 function runServer(port = PORT) {
   const server = app
