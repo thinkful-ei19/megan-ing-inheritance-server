@@ -1,8 +1,8 @@
 'use strict';
 
 const config = require('../config');
-const router = express.Router();
 const express = require('express');
+const router = express.Router();
 const passport = require('passport');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
@@ -34,4 +34,4 @@ router.post('/refresh', jwtAuth, (req, res) => {
 });
 //Note to self: the /refresh will refresh your JWT before it expires (otherwise you have to go back to )
 
-module.exports = {router};
+module.exports = router;
