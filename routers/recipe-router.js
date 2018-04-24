@@ -5,7 +5,15 @@ const {Recipe} = require('../models/recipe');
 const router = express.Router();
 const jsonParser = bodyParser.json();
 
-router.post('/api/recipes', jsonParser, (req, res) => {
+
+router.get('/recipes', (req, res, next)=>{
+  return Recipe.find()
+    .then(results=> res.json(results))
+    .catch(err=> next(err));
+});
+  
+
+router.post('/recipes', jsonParser, (req, res) => {
   const requiredFields = ['title', 'ingredients', 'recipe'];
   const missingField = requiredFields.find(field => !(field in req.body));
   
@@ -35,4 +43,4 @@ router.post('/api/recipes', jsonParser, (req, res) => {
 });
   
   
-module.exports = {router};
+module.exports = router;

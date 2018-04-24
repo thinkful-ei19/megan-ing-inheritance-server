@@ -4,6 +4,7 @@ const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
 const passport = require('passport');
+const recipeRouter = require('./routers/recipe-router');
 
 
 const { PORT, CLIENT_ORIGIN } = require('./config');
@@ -12,14 +13,6 @@ const { dbConnect } = require('./db-mongoose');
 const bodyParser = require('body-parser');
 
 const app = express();
-
-const recipes = [
-  {
-    title: 'Grandmas Hashbrowns',
-    ingredients: '5 onion, 8 potatoes, 3 eggs',
-    recipe:'Shred stuff, cook stuff'
-  }
-];
 
 
 app.use(
@@ -36,15 +29,7 @@ app.use(
 
 app.use(bodyParser.json());
 
-app.get('/api/recipes', (req, res)=>{
-  res.json(recipes);
-});
-
-app.post('/api/recipes', (req, res)=>{
-  const {title, ingredients, recipe}=req.body;
-  console.log(title, ingredients, recipe);
-  res.json('hello world');
-});
+app.use('/api', recipeRouter);
 
 function runServer(port = PORT) {
   const server = app
