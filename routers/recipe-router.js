@@ -16,6 +16,7 @@ router.get('/recipes', (req, res, next)=>{
 router.post('/recipes', jsonParser, (req, res) => {
   const requiredFields = ['title', 'ingredients', 'recipe'];
   const missingField = requiredFields.find(field => !(field in req.body));
+  // const userId = req.user.id;
   
   if (missingField) {
     return res.status(422).json({
@@ -31,7 +32,8 @@ router.post('/recipes', jsonParser, (req, res) => {
   return Recipe.create({
     title,
     ingredients,
-    recipe
+    recipe,
+    // userId
   })
     .then(() => {
       return res.status(201);

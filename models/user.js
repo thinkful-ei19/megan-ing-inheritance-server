@@ -26,6 +26,7 @@ UserSchema.statics.hashPassword = function(password) {
 UserSchema.methods.serialize = function() {
   return {
     username: this.username || '',
+    userId: this._id,
     firstName: this.firstName || ''
   };
 };
