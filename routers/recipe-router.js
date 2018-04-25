@@ -72,4 +72,43 @@ router.post('/recipes', jsonParser, (req, res) => {
 });
   
   
+router.put('/recipes/:id', (req, res, next) => {
+  const { id } = req.params;
+  const { title, ingredients, recipe } = req.body;
+  // const userId = req.user.id;
+  const updateNote = { title, ingredients, recipe };//add userId for jwt
+
+  /***** Never trust users - validate input *****/
+  if (!title) {
+    const err = new Error('Missing `title` in request body');
+    err.status = 400;
+    return next(err);
+  }
+  if (!ingredients) {
+    const err = new Error('Missing `ingredients` in request body');
+    err.status = 400;
+    return next(err);
+  }
+  if (!recipe) {
+    const err = new Error('Missing `recipe` in request body');
+    err.status = 400;
+    return next(err);
+  }
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    const err = new Error('The `id` is not valid');
+    err.status = 400;
+    return next(err);
+  }
+
+  return Recipe.findByIdAndUpdate(id, updateNote, { new: true })
+    .then(result => {
+      if (result) {
+        res.json(result);
+      } else {
+        next();
+      }
+    })
+    .catch(err => next(err));
+});
+
 module.exports = router;
