@@ -4,6 +4,8 @@ const bodyParser = require('body-parser');
 const {Recipe} = require('../models/recipe');
 const router = express.Router();
 const jsonParser = bodyParser.json();
+const mongoose = require('mongoose');
+
 
 
 router.get('/recipes', (req, res, next)=>{
@@ -11,6 +13,30 @@ router.get('/recipes', (req, res, next)=>{
     .then(results=> res.json(results))
     .catch(err=> next(err));
 });
+
+router.get('/recipes/:id', (req, res, next) => {
+  const { id } = req.params;
+  // const userId = req.user.id;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    const err = new Error('The `id` is not valid');
+    err.status = 400;
+    return next(err);
+  }
+
+  Recipe.findOne({ _id: id  })//add userId for jwt
+    .then(result => {
+      if (result) {
+        res.json(result);
+      } else {
+        next();
+      }
+    })
+    .catch(err => {
+      next(err);
+    });
+});
+
   
 
 router.post('/recipes', jsonParser, (req, res) => {
@@ -35,8 +61,9 @@ router.post('/recipes', jsonParser, (req, res) => {
     recipe,
     // userId
   })
-    .then(() => {
-      return res.status(201);
+    .then(result => {
+      res.location(`${req.originalUrl}/${result._id}`).status(201).json(result);
+      console.log(result._id);
     })
     .catch(err => {
       console.log(err);
