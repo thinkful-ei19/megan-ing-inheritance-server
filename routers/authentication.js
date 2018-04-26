@@ -7,7 +7,6 @@ const passport = require('passport');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 
-//Note: ideas also taken from jwt drill.  Retyped for understanding and notated for comprehension
 const createToken = function(user) {
   return jwt.sign({user}, config.JWT_SECRET, {
     subject: user.username,

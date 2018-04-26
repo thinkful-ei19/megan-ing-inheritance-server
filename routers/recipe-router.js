@@ -10,15 +10,17 @@ const jwtAuth = passport.authenticate('jwt', {session: false});
 
 
 
-router.get('/recipes', (req, res, next)=>{
-  return Recipe.find()
+router.get('/recipes', jwtAuth, (req, res, next)=>{
+  const userId = req.user.userId;
+  let filter = {userId};
+  return Recipe.find(filter)
     .then(results=> res.json(results))
     .catch(err=> next(err));
 });
 
-router.get('/recipes/:id', (req, res, next) => {
+router.get('/recipes/:id', jwtAuth, (req, res, next) => {
   const { id } = req.params;
-  // const userId = req.user.id;
+  const userId = req.user.userId;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     const err = new Error('The `id` is not valid');
@@ -26,7 +28,7 @@ router.get('/recipes/:id', (req, res, next) => {
     return next(err);
   }
 
-  Recipe.findOne({ _id: id  })//add userId for jwt
+  Recipe.findOne({ _id: id, userId })//add userId for jwt
     .then(result => {
       if (result) {
         res.json(result);
@@ -74,11 +76,11 @@ router.post('/recipes', jsonParser, jwtAuth, (req, res) => {
 });
   
   
-router.put('/recipes/:id', (req, res, next) => {
+router.put('/recipes/:id', jwtAuth, (req, res, next) => {
   const { id } = req.params;
   const { title, ingredients, recipe } = req.body;
-  // const userId = req.user.id;
-  const updateNote = { title, ingredients, recipe };//add userId for jwt
+  const userId = req.user.userId;
+  const updateNote = { title, ingredients, recipe, userId };//add userId for jwt
 
   /***** Never trust users - validate input *****/
   if (!title) {
@@ -112,5 +114,21 @@ router.put('/recipes/:id', (req, res, next) => {
     })
     .catch(err => next(err));
 });
+
+// router.delete('/recipes/:id', jwtAuth, (req, res, next) => {
+//   const { id } = req.params;
+//   const userId = req.user.userId;
+
+//   Recipe.findOneAndRemove({ _id: id, userId })
+//     .then(result => {
+//       if (!result) {
+//         next();
+//       }
+//       res.status(204).end();
+//     })
+//     .catch(err => {
+//       next(err);
+//     });
+// });
 
 module.exports = router;
