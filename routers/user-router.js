@@ -114,7 +114,7 @@ router.post('/users', jsonParser, (req, res) => {
       });
     })
     .then(user => {
-      return res.status(201).json(user.serialize());
+      return res.status(201).json(user.serialize()).location(`/api/users/${user.id}`);
     })
     .catch(err => {
       if (err.reason === 'ValidationError') {

@@ -5,6 +5,8 @@ const {Recipe} = require('../models/recipe');
 const router = express.Router();
 const jsonParser = bodyParser.json();
 const mongoose = require('mongoose');
+const passport = require('passport');
+const jwtAuth = passport.authenticate('jwt', {session: false});
 
 
 
@@ -37,12 +39,13 @@ router.get('/recipes/:id', (req, res, next) => {
     });
 });
 
-  
 
-router.post('/recipes', jsonParser, (req, res) => {
+
+router.post('/recipes', jsonParser, jwtAuth, (req, res) => {
   const requiredFields = ['title', 'ingredients', 'recipe'];
   const missingField = requiredFields.find(field => !(field in req.body));
-  // const userId = req.user.id;
+  const userId = req.user.userId;
+  console.log(userId);
   
   if (missingField) {
     return res.status(422).json({
@@ -59,11 +62,10 @@ router.post('/recipes', jsonParser, (req, res) => {
     title,
     ingredients,
     recipe,
-    // userId
+    userId
   })
     .then(result => {
       res.location(`${req.originalUrl}/${result._id}`).status(201).json(result);
-      console.log(result._id);
     })
     .catch(err => {
       console.log(err);

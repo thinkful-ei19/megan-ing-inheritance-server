@@ -19,6 +19,15 @@ const UserSchema = mongoose.Schema({
   fullName: {type: String, default: ''}
 });
 
+UserSchema.set('toObject', {
+  transform: function (doc, ret) {
+    ret.id = ret._id;
+    delete ret._id;
+    delete ret.__v;
+    delete ret.password;
+  }
+});
+
 UserSchema.statics.hashPassword = function(password) {
   return bcrypt.hash(password, 10);
 };
