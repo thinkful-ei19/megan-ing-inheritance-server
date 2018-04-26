@@ -115,20 +115,20 @@ router.put('/recipes/:id', jwtAuth, (req, res, next) => {
     .catch(err => next(err));
 });
 
-// router.delete('/recipes/:id', jwtAuth, (req, res, next) => {
-//   const { id } = req.params;
-//   const userId = req.user.userId;
+router.delete('/recipes/:id', jwtAuth, (req, res, next) => {
+  const { id } = req.params;
+  const userId = req.user.userId;
 
-//   Recipe.findOneAndRemove({ _id: id, userId })
-//     .then(result => {
-//       if (!result) {
-//         next();
-//       }
-//       res.status(204).end();
-//     })
-//     .catch(err => {
-//       next(err);
-//     });
-// });
+  Recipe.findOneAndRemove({ _id: id, userId })
+    .then(result => {
+      if (!result) {
+        next();
+      }
+      res.status(204).end();
+    })
+    .catch(err => {
+      next(err);
+    });
+});
 
 module.exports = router;
