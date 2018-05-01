@@ -28,7 +28,7 @@ router.get('/recipes/:id', jwtAuth, (req, res, next) => {
     return next(err);
   }
 
-  Recipe.findOne({ _id: id, userId })//add userId for jwt
+  Recipe.findOne({ _id: id, userId })
     .then(result => {
       if (result) {
         res.json(result);
@@ -80,9 +80,7 @@ router.put('/recipes/:id', jwtAuth, (req, res, next) => {
   const { id } = req.params;
   const { title, ingredients, recipe } = req.body;
   const userId = req.user.userId;
-  const updateNote = { title, ingredients, recipe, userId };//add userId for jwt
-
-  /***** Never trust users - validate input *****/
+  const updateNote = { title, ingredients, recipe, userId };
   if (!title) {
     const err = new Error('Missing `title` in request body');
     err.status = 400;
