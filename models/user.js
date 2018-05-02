@@ -36,7 +36,7 @@ UserSchema.methods.serialize = function() {
   return {
     username: this.username || '',
     userId: this._id,
-    firstName: this.firstName || ''
+    fullName: this.fullName || ''
   };
 };
 //Note to self: To serialize an object means to convert its state to a byte stream 
