@@ -10,7 +10,7 @@ const { TEST_DATABASE_URL, JWT_SECRET } = require('../config');
 const Recipe = require('../models/recipe');
 const User = require('../models/user');
 
-const seedRecipes = require('../db/seed/recipe');
+const seedRecipes = require('../db/seed/recipes');
 const seedUsers = require('../db/seed/users');
 
 const expect = chai.expect;
