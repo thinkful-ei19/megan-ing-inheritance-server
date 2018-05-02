@@ -207,84 +207,105 @@ describe('Ingredient Inheritance-Recipes', function () {
 
   });
 
-  describe('PUT /api/notes/:id', function () {
-    it('should update the note', function () {
-      const updateItem = {
-        'title': 'What about dogs?!',
-        'content': 'woof woof'
+  describe('PUT /api/recipes/:id', function () {
+    it('should update the recipe', function () {
+      const updateRecipe = {
+        'title': 'Changed',
+        'ingredients': 'check',
+        'recipe':'changed'
       };
-      let data;
+      let dbData;
 
-      return Note.findOne({ userId: user.userId })
-        .then(_data => {
-          data = _data;
+      return Recipe.findOne({ userId: user.userId })
+        .then(data => {
+          dbData = data;
 
           return chai.request(app)
-            .put(`/api/notes/${data.id}`)
-            .send(updateItem)
+            .put(`/api/recipes/${dbData.id}`)
+            .send(updateRecipe)
             .set('Authorization', `Bearer ${token}`);
         })
         .then(function (res) {
           expect(res).to.have.status(200);
           expect(res).to.be.json;
           expect(res.body).to.be.a('object');
-          expect(res.body).to.have.keys('id', 'title', 'content', 'created', 'folderId', 'tags', 'userId');
-          expect(res.body.id).to.equal(data.id);
-          expect(res.body.title).to.equal(updateItem.title);
-          expect(res.body.content).to.equal(updateItem.content);
+          expect(res.body).to.have.keys('_id', 'title', 'recipe', 'ingredients', '__v', 'userId');
+          expect(res.body._id).to.equal(dbData.id);
+          expect(res.body.title).to.equal(updateRecipe.title);
+          expect(res.body.content).to.equal(updateRecipe.content);
         });
     });
 
-
-    it('should respond with a 400 for improperly formatted id', function () {
-      const badId = 'NOT-A-VALID-ID';
-      const updateItem = {
-        'title': 'What about dogs?!',
-        'content': 'woof woof'
-      };
-
-      return chai.request(app)
-        .put(`/api/notes/${badId}`)
-        .set('Authorization', `Bearer ${token}`)
-        .send(updateItem)
-        .catch(err => err.response)
-        .then(res => {
-          expect(res).to.have.status(400);
-          expect(res.body.message).to.eq('The `id` is not valid');
-        });
-    });
 
     it('should respond with a 404 for an invalid id', function () {
-      const updateItem = {
-        'title': 'What about dogs?!',
-        'content': 'woof woof'
+      const updateRecipe = {
+        'title': 'Changed',
+        'ingredients': 'check',
+        'recipe':'changed'
       };
 
       return chai.request(app)
-        .put('/api/notes/DOESNOTEXIST')
+        .put('/api/recipe/NOTGOINGTOWORK')
         .set('Authorization', `Bearer ${token}`)
-        .send(updateItem)
+        .send(updateRecipe)
         .catch(err => err.response)
         .then(res => {
           expect(res).to.have.status(404);
         });
     });
 
-    it('should return an error when missing "title" field', function () {
-      const updateItem = { 'foo': 'bar' };
 
+    it('should return an error when missing "title" field', function () {
+      const updatedRecipe = { 'foo': 'bar', 'ingredients':'test', 'recipe':'test' };
+      
       return chai.request(app)
-        .put('/api/notes/9999')
+        .put('/api/recipes/5ae21b12d0656a0cb89a583c')
         .set('Authorization', `Bearer ${token}`)
-        .send(updateItem)
+        .send(updatedRecipe)
         .catch(err => err.response)
         .then(res => {
+          console.log(res.body);
           expect(res).to.have.status(400);
           expect(res).to.be.json;
           expect(res.body).to.be.a('object');
           expect(res.body.message).to.equal('Missing `title` in request body');
         });
     });
+    
+    it('should return an error when missing "ingredients" field', function () {
+      const updatedRecipe = { 'title': 'bar', 'foo':'test', 'recipe':'test' };
+      
+      return chai.request(app)
+        .put('/api/recipes/5ae21b12d0656a0cb89a583c')
+        .set('Authorization', `Bearer ${token}`)
+        .send(updatedRecipe)
+        .catch(err => err.response)
+        .then(res => {
+          console.log(res.body);
+          expect(res).to.have.status(400);
+          expect(res).to.be.json;
+          expect(res.body).to.be.a('object');
+          expect(res.body.message).to.equal('Missing `ingredients` in request body');
+        });
+    });
+   
+    it('should return an error when missing "recipe" field', function () {
+      const updatedRecipe = { 'title': 'bar', 'ingredients':'test', 'foo':'test' };
+      
+      return chai.request(app)
+        .put('/api/recipes/5ae21b12d0656a0cb89a583c')
+        .set('Authorization', `Bearer ${token}`)
+        .send(updatedRecipe)
+        .catch(err => err.response)
+        .then(res => {
+          console.log(res.body);
+          expect(res).to.have.status(400);
+          expect(res).to.be.json;
+          expect(res.body).to.be.a('object');
+          expect(res.body.message).to.equal('Missing `recipe` in request body');
+        });
+    });
+  
   });
 
   describe('DELETE  /api/notes/:id', function () {
