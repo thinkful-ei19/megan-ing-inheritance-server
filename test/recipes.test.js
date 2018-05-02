@@ -310,22 +310,22 @@ describe('Ingredient Inheritance-Recipes', function () {
 
   describe('DELETE  /api/notes/:id', function () {
     it('should delete an item by id', function () {
-      let data;
+      let dbData;
 
-      return Note
+      return Recipe
         .findOne({ userId: user.userId })
-        .then(_data => {
-          data = _data;
+        .then(data => {
+          dbData = data;
 
           return chai.request(app)
-            .delete(`/api/notes/${data.id}`)
+            .delete(`/api/recipes/${dbData.id}`)
             .set('Authorization', `Bearer ${token}`);
         })
-        .then(res => {
-          expect(res).to.have.status(204);
-          expect(res.body).to.be.empty;
+        .then(apiResult => {
+          expect(apiResult).to.have.status(204);
+          expect(apiResult.body).to.be.empty;
 
-          return Note.findById(data.id);
+          return Recipe.findById(dbData.id);
         })
         .then((item) => {
           expect(item).to.be.null;
