@@ -114,7 +114,7 @@ describe('Ingredient Inheritance-Recipes', function () {
         });
     });
 
-    it.only('should respond with a 404 for a bad id', function () {
+    it('should respond with a 404 for a bad id', function () {
       const badId = 'DOES-NOT-EXIST';
 
       return chai.request(app)
@@ -128,31 +128,33 @@ describe('Ingredient Inheritance-Recipes', function () {
     });
   });
 
-  describe('POST /api/notes', function () {
-    it('should create and return a new item when provided valid data', function () {
-      const newItem = {
+  describe('POST /api/recipes', function () {
+    it.only('should create and return a new recipe item when provided valid data', function () {
+      const newRecipe = {
         'title': 'The best article about cats ever!',
-        'content': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...'
+        'ingredients': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...',
+        'recipe': 'test'
       };
-      let res;
+      let apiResult;
 
       return chai.request(app)
-        .post('/api/notes')
+        .post('/api/recipes')
         .set('Authorization', `Bearer ${token}`)
-        .send(newItem)
-        .then(function (_res) {
-          res = _res;
-          expect(res).to.have.status(201);
-          expect(res).to.have.header('location');
-          expect(res).to.be.json;
-          expect(res.body).to.be.a('object');
-          expect(res.body).to.have.keys('id', 'title', 'content', 'created', 'tags', 'userId');
+        .send(newRecipe)
+        .then(function (_apiResult) {
+          apiResult = _apiResult;
+          expect(apiResult).to.have.status(201);
+          expect(apiResult).to.have.header('location');
+          expect(apiResult).to.be.json;
+          expect(apiResult.body).to.be.a('object');
+          expect(apiResult.body).to.have.keys('_id', 'title', 'ingredients', 'recipe', 'userId', '__v');
 
-          return Note.findOne({ _id: res.body.id, userId: user.userId });
+          return Recipe.findOne({ _id: apiResult.body._id, userId: user.userId });
         })
         .then(data => {
-          expect(res.body.title).to.equal(data.title);
-          expect(res.body.content).to.equal(data.content);
+          expect(apiResult.body.title).to.equal(data.title);
+          expect(apiResult.body.ingredients).to.equal(data.ingredients);
+          expect(apiResult.body.recipe).to.equal(data.recipe);
         });
     });
 
