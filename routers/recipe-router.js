@@ -14,7 +14,9 @@ router.get('/recipes', jwtAuth, (req, res, next)=>{
   const userId = req.user.userId;
   let filter = {userId};
   return Recipe.find(filter)
-    .then(results=> res.json(results))
+    .then(results=> {
+      res.json(results);
+    })
     .catch(err=> next(err));
 });
 
