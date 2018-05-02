@@ -45,19 +45,16 @@ router.get('/recipes/:id', jwtAuth, (req, res, next) => {
 
 
 
-router.post('/recipes', jsonParser, jwtAuth, (req, res) => {
+router.post('/recipes', jsonParser, jwtAuth, (req, res, next) => {
   const requiredFields = ['title', 'ingredients', 'recipe'];
   const missingField = requiredFields.find(field => !(field in req.body));
   const userId = req.user.userId;
   console.log(userId);
   
   if (missingField) {
-    return res.status(422).json({
-      code: 422,
-      reason: 'ValidationError',
-      message: 'Missing field',
-      location: missingField
-    });
+    const err = new Error(`Missing ${missingField} in request body`);
+    err.status = 400;
+    return next(err);
   }
   
   let {title, ingredients, recipe} = req.body;  

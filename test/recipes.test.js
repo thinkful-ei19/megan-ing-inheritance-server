@@ -129,7 +129,7 @@ describe('Ingredient Inheritance-Recipes', function () {
   });
 
   describe('POST /api/recipes', function () {
-    it.only('should create and return a new recipe item when provided valid data', function () {
+    it('should create and return a new recipe item when provided valid data', function () {
       const newRecipe = {
         'title': 'The best article about cats ever!',
         'ingredients': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...',
@@ -159,20 +159,52 @@ describe('Ingredient Inheritance-Recipes', function () {
     });
 
     it('should return an error when missing "title" field', function () {
-      const newItem = { 'foo': 'bar' };
+      const newRecipe = { 'foo': 'bar', 'ingredients':'test', 'recipe':'test' };
 
       return chai.request(app)
-        .post('/api/notes')
+        .post('/api/recipes')
         .set('Authorization', `Bearer ${token}`)
-        .send(newItem)
+        .send(newRecipe)
         .catch(err => err.response)
         .then(res => {
           expect(res).to.have.status(400);
           expect(res).to.be.json;
           expect(res.body).to.be.a('object');
-          expect(res.body.message).to.equal('Missing `title` in request body');
+          expect(res.body.message).to.equal('Missing title in request body');
         });
     });
+    it('should return an error when missing "ingredients" field', function () {
+      const newRecipe = { 'title': 'bar', 'foo':'test', 'recipe':'test' };
+
+      return chai.request(app)
+        .post('/api/recipes')
+        .set('Authorization', `Bearer ${token}`)
+        .send(newRecipe)
+        .catch(err => err.response)
+        .then(res => {
+          expect(res).to.have.status(400);
+          expect(res).to.be.json;
+          expect(res.body).to.be.a('object');
+          expect(res.body.message).to.equal('Missing ingredients in request body');
+        });
+    });
+    
+    it('should return an error when missing "recipe" field', function () {
+      const newRecipe = { 'title': 'bar', 'ingredients':'test', 'foo':'test' };
+
+      return chai.request(app)
+        .post('/api/recipes')
+        .set('Authorization', `Bearer ${token}`)
+        .send(newRecipe)
+        .catch(err => err.response)
+        .then(res => {
+          expect(res).to.have.status(400);
+          expect(res).to.be.json;
+          expect(res.body).to.be.a('object');
+          expect(res.body.message).to.equal('Missing recipe in request body');
+        });
+    });
+
   });
 
   describe('PUT /api/notes/:id', function () {
