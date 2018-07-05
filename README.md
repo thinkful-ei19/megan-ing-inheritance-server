@@ -3,11 +3,23 @@ Made using Node.js, complete with testing.
 React.js client side app found here: [Ingredient Inheritance Client Github](https://github.com/thinkful-ei19/megan-ing-inheritance-client)
 
 ## Table of Contents:
--Description
--Instructions
+* Description
+* API Documentation
+* Instructions
 
 ### Description:
 Server side for Ingredient Inheritance.  Uses Node.js and MongoDB.
+
+### API Documentation:
+
+    * /login creates auth token
+    * /refresh refreshes auth token before it expires
+    * /users creates a new user based on username and password from request body
+    * /recipes get request gets all recipes for a specific user based on userId
+    * /recipes post request posts a new recipe based on a users id
+    * /recipes/:id get request gets a specific recipe based on recipe id (in params) and userId
+    * /recipes/:id put request updates a specific recipe based on recipe id (in params) and userID
+    * /recipes/:id delete request deletes a specific recipe based on recipe id (in params) and userId
 
 ### Instructions:
     -clone this repo
