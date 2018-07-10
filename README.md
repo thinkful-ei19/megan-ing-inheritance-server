@@ -3,13 +3,18 @@ Made using Node.js, complete with testing.
 React.js client side app found here: [Ingredient Inheritance Client Github](https://github.com/thinkful-ei19/megan-ing-inheritance-client)
 
 ## Table of Contents:
+* Tech Used
 * Description
 * API Documentation
 * Instructions
 
-### Description:
-Server side for Ingredient Inheritance.  Uses Node.js and MongoDB.
+### Tech Used:
+Node.js
+Express
+MongoDB
+Mocha/Chai
 
+### Description:
 Ingredient Inheritance is a web app made to store secret family recipes. It is a password-protected site with protected endpoints so that users are only able to view their own recipes/no one outside the family can see them.
 
 As a user, you are able to register, login, logout, create new recipes, view saved recipes, edit saved recipes, and delete saved recipes. The nav bar also contains an instructions button for the user so you have guided/step-by-step instructions on how to use the app.
