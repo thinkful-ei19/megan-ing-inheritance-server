@@ -10,6 +10,14 @@ React.js client side app found here: [Ingredient Inheritance Client Github](http
 ### Description:
 Server side for Ingredient Inheritance.  Uses Node.js and MongoDB.
 
+Ingredient Inheritance is a web app made to store secret family recipes. It is a password-protected site with protected endpoints so that users are only able to view their own recipes/no one outside the family can see them.
+
+As a user, you are able to register, login, logout, create new recipes, view saved recipes, edit saved recipes, and delete saved recipes. The nav bar also contains an instructions button for the user so you have guided/step-by-step instructions on how to use the app.
+
+As long as the user remains active on the page, their JWT will automatically refresh just before every hour (JWT expires in an hour on server side unless refreshed), allowing the user to remain on the main page with all their recipes.
+
+If the user is inactive for an hour, the app will log them out on the client side, not refresh their JWT on the server side, and also prompt them 1 minute before the logout. However, if they click the "Stay on Page" button in the prompt, the client will send off the request to refresh their JWT and the user will be able to remain on the page.
+
 ### API Documentation:
 
     * /login creates auth token
