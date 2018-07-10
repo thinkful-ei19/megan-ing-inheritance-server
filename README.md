@@ -9,9 +9,9 @@ React.js client side app found here: [Ingredient Inheritance Client Github](http
 * Instructions
 
 ### Tech Used:
-Node.js
-Express
-MongoDB
+Node.js,
+Express,
+MongoDB,
 Mocha/Chai
 
 ### Description:
